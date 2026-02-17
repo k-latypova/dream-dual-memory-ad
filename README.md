@@ -157,7 +157,7 @@ python src/scripts/run_patchcore.py \
   "output/patchcore_results" \
   patch_core \
     -b vit_large_dino \
-    -le blocks.5 -le blocks.7 -le blocks.11 -le blocks.14 \
+     -le blocks.7 -le blocks.11 \
     -le blocks.17 -le blocks.20 -le blocks.22 \
     --alpha 10.0 \
     --metric_type IP --anomaly_score_fn ratio --faiss_on_gpu --score mean \
