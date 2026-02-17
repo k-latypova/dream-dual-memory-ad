@@ -1,0 +1,31 @@
+import torch
+import argparse
+from src.trainers.mvtec_ad_pretrainer import MvtecADPreTrainer
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Pretrain MVTec AD model with ImageNet embeddings")
+    parser.add_argument("--mvtec-root", type=str, required=True, help="Path to the MVTec AD dataset directory")
+    parser.add_argument("--mvtec2-root", type=str, required=True, help="Path to the MVTec2 AD dataset directory")
+    parser.add_argument("--imagenet-root", type=str, required=True, help="Path to the ImageNet dataset directory")
+    parser.add_argument("--classname", type=str, required=False, default=None, help="Class name for MVTec AD dataset")
+    parser.add_argument("--batch-size", type=int, default=64, help="Batch size for training")
+    parser.add_argument("--epochs", type=int, default=10, help="Number of epochs for training")
+    parser.add_argument("--stats-file", type=str, required=True, help="Path to the statistics file for normalization")
+    parser.add_argument("--width", type=int, default=224, help="Image width for training")
+    parser.add_argument("--height", type=int, default=224, help="Image height for training")
+    parser.add_argument("--num-workers", type=int, default=4, help="Number of workers for data loading")
+    parser.add_argument("--device", type=str, default="cuda" if torch.cuda.is_available() else "cpu", help="Device to use for training")
+    parser.add_argument("--lr", type=float, default=0.001, help="Learning rate for the optimizer")
+    parser.add_argument('--momentum', type=float, default=0.9, help='Momentum for the optimizer')
+    parser.add_argument('--weight-decay', type=float, default=5e-4, help='Weight decay for the optimizer')
+    parser.add_argument("--output-dir", type=str, default="./output", help="Directory to save the model and embeddings")
+    parser.add_argument("--text-encoder-weights", type=str, required=False, help="Path to the text encoder weights file")
+    parser.add_argument("--prompt", type=str, default="a photo of a {}", help="Prompt template for text encoder")
+    parser.add_argument("--crop_size", type=int, default=224, help="Crop size for image augmentation")
+    parser.add_argument("--anchor_token_id", type=int, default=0, help="Anchor token ID for the text encoder")
+    parser.add_argument("--load_weights", type=str, default=None, help="Weights to contrinue training from")
+    parser.add_argument("--init_epoch", type=int, default=0, help="Epoch to start training from")
+    parser.add_argument("--text_encoders_file", type=str, required=True, help="Path to the files to match class categories with text encoder weights")
+    args = parser.parse_args()
+    trainer = MvtecADPreTrainer(args)
+    trainer.train()
